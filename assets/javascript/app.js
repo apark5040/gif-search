@@ -11,6 +11,7 @@ $("#add-gif").on("click", function (event) {
 
     var searchValue = $("#gif-input").val().trim();
 
+    //Made if statements to prevent blank inputs and duplicates
     if(topics.indexOf(searchValue) >= 0){
         searchValue = "";
     }
@@ -66,7 +67,7 @@ function displayGifs() {
 
         for (var i = 0; i < searchTerm.length; i++) {
 
-            var newDiv = $("<div class='col-md-3 searchGif'>");
+            var newDiv = $("<div class='col-md-5 searchGif'>");
             var newImage = $("<img class='gif'>");
             var newP = $("<p>");
             newP.text("Rating: " + searchTerm[i].rating);
