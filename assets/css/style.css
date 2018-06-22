@@ -12,6 +12,7 @@ h1 {
 .headingStyle{
     background-color: white;
     opacity: 0.5;
+    border: solid 5px grey;
 }
 
 #search{
