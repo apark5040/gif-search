@@ -1,5 +1,5 @@
 //Array with list of topics of gifs to search for
-var topics = ["Elder Scrolls", "Pac Man", "Mega Man", "The Legend of Zelda"];
+var topics = ["Elder Scrolls", "Pac Man", "Mega Man", "The Legend of Zelda", "Last of Us", "Crash Bandicoot", "Final Fantasy", "Chrono Trigger", "Dragon Quest", "Street Fighter", "Overwatch", "League of Legends"];
 
 //Initial display of buttons from the array
 showButtons();
@@ -10,7 +10,15 @@ $("#add-gif").on("click", function (event) {
     event.preventDefault();
 
     var searchValue = $("#gif-input").val().trim();
-    topics.push(searchValue);
+
+    if(topics.indexOf(searchValue) >= 0){
+        searchValue = "";
+    }
+
+    if(searchValue != ""){
+        topics.push(searchValue);
+    }
+
     showButtons();
 });
 
@@ -54,26 +62,31 @@ function displayGifs() {
     }).then(function (response) {
 
         var searchTerm = response.data;
+        console.log(response);
 
         for (var i = 0; i < searchTerm.length; i++) {
 
+            var newDiv = $("<div class='col-md-3 searchGif'>");
             var newImage = $("<img class='gif'>");
             var newP = $("<p>");
             newP.text("Rating: " + searchTerm[i].rating);
+            newDiv.append(newP, newImage);
 
             newImage.attr("data-state", "still");
-            newImage.attr("src", searchTerm[i].images.fixed_height_still.url);
-            newImage.attr("data-animate", searchTerm[i].images.fixed_height.url);
-            newImage.attr("data-still", searchTerm[i].images.fixed_height_still.url);
+            newImage.attr("src", searchTerm[i].images.fixed_width_still.url);
+            newImage.attr("data-animate", searchTerm[i].images.fixed_width.url);
+            newImage.attr("data-still", searchTerm[i].images.fixed_width_still.url);
 
-            $("#gifs-here").append(newP, newImage);
+            $("#gifs-here").append(newDiv);
 
         }
     });
-}
+};
 
-//Adds any buttons with the "gif" class to run the displayGifs function when clicked
+//Adds any buttons with the "gifButton" class to run the displayGifs function when clicked
 $(document).on("click", ".gifButton", displayGifs);
+
+//Adds any gifs with the "gif" class to run the displayGifs functionwhen clicked
 $(document).on("click", ".gif", animateGif);
 
 
