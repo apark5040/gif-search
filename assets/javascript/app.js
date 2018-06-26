@@ -85,8 +85,11 @@ $("#clear-favorite").on("click", function (event) {
 
     event.preventDefault();
 
-    //Removes the local storage array
-    localStorage.removeItem("gifFavArray");
+    //Declares empty variable
+    var clearArray = [];
+
+    //Updates the local storage array to an empty array
+    localStorage.setItem("gifFavArray", JSON.stringify(clearArray));
 
     //Updates the favorite section
     showFavorites();
