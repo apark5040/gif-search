@@ -188,7 +188,7 @@ function displayGifs() {
             var newDiv = $("<div class='col-md-5 searchGif'>");
             var newImage = $("<img class='gif'>");
             var newP = $("<p>");
-            newP.text("Rating: " + searchTerm[i].rating);
+            newP.text((i+1)+".) Rating: " + searchTerm[i].rating);
             newDiv.append(newP, newImage);
 
             newImage.attr("data-state", "still");
