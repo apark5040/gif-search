@@ -182,14 +182,17 @@ function displayGifs() {
     }).then(function (response) {
 
         var searchTerm = response.data;
+        console.log(searchTerm);
 
         for (var i = 0; i < searchTerm.length; i++) {
 
             var newDiv = $("<div class='col-md-5 searchGif'>");
             var newImage = $("<img class='gif'>");
             var newP = $("<p>");
-            newP.text((i+1)+".) Rating: " + searchTerm[i].rating);
-            newDiv.append(newP, newImage);
+            var newp2 = $("<p>");
+            newP.text("Rating: " + searchTerm[i].rating);
+            newp2.text((i+1)+".) " + searchTerm[i].title);
+            newDiv.append(newp2, newP, newImage);
 
             newImage.attr("data-state", "still");
             newImage.attr("src", searchTerm[i].images.fixed_width_still.url);
