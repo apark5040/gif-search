@@ -8,7 +8,6 @@ showButtons();
 isLocalStorage();
 
 
-
 //Adds click function for the input tag that adds whatever value within the search box into a button
 $("#add-gif").on("click", function (event) {
 
@@ -86,11 +85,8 @@ $("#clear-favorite").on("click", function (event) {
 
     event.preventDefault();
 
-    //Declares empty variable
-    var clearArray = [];
-
-    //Updates the local storage array to an empty array
-    localStorage.setItem("gifFavArray", JSON.stringify(clearArray));
+    //Removes the local storage array
+    localStorage.removeItem("gifFavArray");
 
     //Updates the favorite section
     showFavorites();
