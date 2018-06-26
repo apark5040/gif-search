@@ -4,7 +4,7 @@ var topics = ["Elder Scrolls", "Pac Man", "Mega Man", "The Legend of Zelda", "La
 //Initial display of buttons from the array
 showButtons();
 
-//This will show the favorites if there are any in the local storage
+//This will show the favorites if there are any in the local storage. If not, then it will create a local storage
 if (JSON.parse(localStorage.getItem("gifFavArray"))) {
     showFavorites();
 }
@@ -14,12 +14,12 @@ else {
 }
 
 
-
 //Adds click function for the input tag that adds whatever value within the search box into a button
 $("#add-gif").on("click", function (event) {
 
     event.preventDefault();
 
+    //grabs the input value
     var searchValue = $("#gif-input").val().trim();
 
     //Made if statements to prevent blank inputs and duplicates
@@ -30,62 +30,79 @@ $("#add-gif").on("click", function (event) {
     if (searchValue == "") {
         return;
     }
+
+    //adds the input into the topics array
     topics.push(searchValue);
+
+    //clears input field
     $("#gif-input").val("");
 
-    //adding the current and newly added term to local storage
-
+    //updates the list of buttons to include the new button
     showButtons();
 });
 
+
+//Event handler for click function to add favorite buttons
 $("#add-favorite").on("click", function (event) {
 
     event.preventDefault();
 
-
-
+    //array variable for push to local storage
     var favList = [];
+
+    //grabing input value
     var searchFavorite = $("#gif-input").val().trim();
 
+    //Prevent duplicates and blanks
     if (searchFavorite == "") {
         return;
     }
-
-
     if (JSON.parse(localStorage.getItem("gifFavArray")).includes(searchFavorite)) {
         return;
     }
 
-    favList.push(searchFavorite);
+    //grabs the array from the local storage and assigns it to array variable
     favList = JSON.parse(localStorage.getItem("gifFavArray"));
+
+    //pushes input value to array
     favList.push(searchFavorite);
+
+    //sets the updated array back into the local storage
     localStorage.setItem("gifFavArray", JSON.stringify(favList));
 
-
-
+    //Clears input field
     $("#gif-input").val("");
 
+    //Displays favorite buttons
     showFavorites();
 
 });
 
 
+//event handler for clear click function
 $("#clear-favorite").on("click", function (event) {
 
     event.preventDefault();
 
-    var clearArray = JSON.parse(localStorage.getItem("gifFavArray"));
-    clearArray = [];
+    //Declares empty variable
+    var clearArray = [];
+
+    //Updates the local storage array to an empty array
     localStorage.setItem("gifFavArray", JSON.stringify(clearArray));
 
+    //Updates the favorite section
     showFavorites();
 
 });
 
 
+//function that switches the Still attribute and Animate Attribute to start and stop gif
 function animateGif() {
+
+    //grabs current state of gif(Animate or Still)
     var state = $(this).attr("data-state");
 
+    //If statement that changes the state
     if (state === "still") {
         $(this).attr("src", $(this).attr("data-animate"));
         $(this).attr("data-state", "animate");
@@ -99,8 +116,10 @@ function animateGif() {
 //function that will display buttons for each item in the array. Used also when adding a new button.
 function showButtons() {
 
+    //empties buttons div to prevent duplicates
     $("#buttons").empty();
 
+    //For statement that goes through every element in array and creates buttons for them
     for (var i = 0; i < topics.length; i++) {
         var arrayButton = $("<button class='gifButton'>");
         arrayButton.attr("data-gif", topics[i]);
@@ -109,10 +128,13 @@ function showButtons() {
     }
 };
 
+//Displays the buttons that were submitted as favorite
 function showFavorites() {
 
+    //empties favorite div to prevent duplicates
     $("#favorite").empty();
 
+    //for loop to display each element in local storage array as a button
     for (var i = 0; i < JSON.parse(localStorage.getItem("gifFavArray")).length; i++) {
         var favoriteButton = $("<button class='gifButton favButton'>");
         favoriteButton.attr("data-gif", JSON.parse(localStorage.getItem("gifFavArray"))[i]);
@@ -125,19 +147,26 @@ function showFavorites() {
 //function that uses the Giphy API, searches the button value, and displays that value on the page
 function displayGifs() {
 
+    //Grabs the value that was clicked
     var topicButton = $(this).attr("data-gif");
+
+    //grabs the value that was selected in the number of gifs dropdown
     var limitNum = $("#limitNumber").val();
+
+    //API URL
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topicButton + "&api_key=St9fx4R3U08J1RutppDEopQxu63ESLaE&limit=" + limitNum;
 
+    //empties gifs to prevent duplicates
     $("#gifs-here").empty();
 
+
+    //ajax function to use API, grabs the gif info, and put the gifs on the html
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (response) {
 
         var searchTerm = response.data;
-        console.log(response);
 
         for (var i = 0; i < searchTerm.length; i++) {
 
@@ -153,7 +182,6 @@ function displayGifs() {
             newImage.attr("data-still", searchTerm[i].images.fixed_width_still.url);
 
             $("#gifs-here").append(newDiv);
-
         }
     });
 };
