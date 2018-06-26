@@ -23,18 +23,30 @@
 
         </div>
 
+        <div class="moreGifs">
+            <label>Select the number of gifs you want: </label>
+            <select id="limitNumber">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+            </select>
+        </div>
+
         <p class="headingFav">Favorites: </p>
         <div id="favorite">
-            
+
         </div>
 
         <div id="search">
             <form id="search-form">
                 <label for="gif-input">Add a video game: </label>
                 <input type="text" id="gif-input">
-                <br>
                 <input id="add-gif" type="submit" value="Submit">
+                <br>
                 <input id="add-favorite" type="submit" value="Add To Favorite">
+                
+                <input id="clear-favorite" type="submit" value="Clear Favorites">
             </form>
         </div>
     </div>

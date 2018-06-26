@@ -8,9 +8,14 @@ var favoriteTopics = [];
 showButtons();
 
 //This will show the favorites if there are any in the local storage
-if(JSON.parse(localStorage.getItem("array"))){
+if (JSON.parse(localStorage.getItem("gifFavArray"))) {
     showFavorites();
 }
+else {
+    var a = [];
+    localStorage.setItem('gifFavArray', JSON.stringify(a));
+}
+
 
 
 //Adds click function for the input tag that adds whatever value within the search box into a button
@@ -21,11 +26,11 @@ $("#add-gif").on("click", function (event) {
     var searchValue = $("#gif-input").val().trim();
 
     //Made if statements to prevent blank inputs and duplicates
-    if(topics.indexOf(searchValue) >= 0){
+    if (topics.indexOf(searchValue) >= 0) {
         searchValue = "";
     }
 
-    if(searchValue != ""){
+    if (searchValue != "") {
         topics.push(searchValue);
 
     }
@@ -37,36 +42,56 @@ $("#add-gif").on("click", function (event) {
     showButtons();
 });
 
-$("#add-favorite").on("click", function(event){
+$("#add-favorite").on("click", function (event) {
 
     event.preventDefault();
 
+
+    var favList = [];
     var searchFavorite = $("#gif-input").val().trim();
 
-    if(favoriteTopics.indexOf(searchFavorite) >= 0){
+
+    if (JSON.parse(localStorage.getItem("gifFavArray")).includes(searchFavorite)) {
         searchFavorite = "";
     }
-
-    if(searchFavorite != ""){
-        favoriteTopics.push(searchFavorite);
+    if (searchFavorite !== "") {
+        favList.push(searchFavorite);
     }
 
+    favList = JSON.parse(localStorage.getItem("gifFavArray"));
+    favList.push(searchFavorite);
+    localStorage.setItem("gifFavArray", JSON.stringify(favList));
+
+
+
     $("#gif-input").val("");
-    
-    localStorage.setItem("array", JSON.stringify(favoriteTopics));
 
     showFavorites();
 
-})
+});
 
-function animateGif(){
+
+$("#clear-favorite").on("click", function (event) {
+
+    event.preventDefault();
+
+    var clearArray = JSON.parse(localStorage.getItem("gifFavArray"));
+    clearArray = [];
+    localStorage.setItem("gifFavArray", JSON.stringify(clearArray));
+
+    showFavorites();
+
+});
+
+
+function animateGif() {
     var state = $(this).attr("data-state");
 
-    if(state === "still"){
+    if (state === "still") {
         $(this).attr("src", $(this).attr("data-animate"));
         $(this).attr("data-state", "animate");
     }
-    else{
+    else {
         $(this).attr("src", $(this).attr("data-still"));
         $(this).attr("data-state", "still");
     }
@@ -85,14 +110,14 @@ function showButtons() {
     }
 };
 
-function showFavorites(){
+function showFavorites() {
 
     $("#favorite").empty();
 
-    for (var i = 0; i < JSON.parse(localStorage.getItem("array")).length; i++) {
+    for (var i = 0; i < JSON.parse(localStorage.getItem("gifFavArray")).length; i++) {
         var favoriteButton = $("<button class='gifButton favButton'>");
-        favoriteButton.attr("data-gif", JSON.parse(localStorage.getItem("array"))[i]);
-        favoriteButton.text(JSON.parse(localStorage.getItem("array"))[i]);
+        favoriteButton.attr("data-gif", JSON.parse(localStorage.getItem("gifFavArray"))[i]);
+        favoriteButton.text(JSON.parse(localStorage.getItem("gifFavArray"))[i]);
         $("#favorite").append(favoriteButton);
     }
 
@@ -102,7 +127,8 @@ function showFavorites(){
 function displayGifs() {
 
     var topicButton = $(this).attr("data-gif");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topicButton + "&api_key=St9fx4R3U08J1RutppDEopQxu63ESLaE&limit=10";
+    var limitNum = $("#limitNumber").val();
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topicButton + "&api_key=St9fx4R3U08J1RutppDEopQxu63ESLaE&limit=" + limitNum;
 
     $("#gifs-here").empty();
 
