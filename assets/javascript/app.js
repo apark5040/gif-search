@@ -4,14 +4,9 @@ var topics = ["Elder Scrolls", "Pac Man", "Mega Man", "The Legend of Zelda", "La
 //Initial display of buttons from the array
 showButtons();
 
-//This will show the favorites if there are any in the local storage. If not, then it will create a local storage
-if (JSON.parse(localStorage.getItem("gifFavArray"))) {
-    showFavorites();
-}
-else {
-    var a = [];
-    localStorage.setItem('gifFavArray', JSON.stringify(a));
-}
+//Adds favorite buttons if there is a local storage array
+isLocalStorage();
+
 
 
 //Adds click function for the input tag that adds whatever value within the search box into a button
@@ -50,6 +45,16 @@ $("#add-favorite").on("click", function (event) {
     //array variable for push to local storage
     var favList = [];
 
+    //If there is no local storage, it will create an empty one. If there is one, it will grab it and store in favList
+    if(!JSON.parse(localStorage.getItem("gifFavArray"))){
+        var a = [];
+        localStorage.setItem('gifFavArray', JSON.stringify(a));
+    }
+    else{
+        //grabs the array from the local storage and assigns it to array variable
+        favList = JSON.parse(localStorage.getItem("gifFavArray"));
+    };
+    
     //grabing input value
     var searchFavorite = $("#gif-input").val().trim();
 
@@ -60,9 +65,6 @@ $("#add-favorite").on("click", function (event) {
     if (JSON.parse(localStorage.getItem("gifFavArray")).includes(searchFavorite)) {
         return;
     }
-
-    //grabs the array from the local storage and assigns it to array variable
-    favList = JSON.parse(localStorage.getItem("gifFavArray"));
 
     //pushes input value to array
     favList.push(searchFavorite);
@@ -113,6 +115,7 @@ function animateGif() {
     }
 };
 
+
 //function that will display buttons for each item in the array. Used also when adding a new button.
 function showButtons() {
 
@@ -127,6 +130,18 @@ function showButtons() {
         $("#buttons").append(arrayButton);
     }
 };
+
+
+//This will print the favorite buttons if there is a local storage. If not, nothing will happend. 
+function isLocalStorage() {
+    //This will show the favorites if there are any in the local storage. If not, then it will create a local storage
+    if (JSON.parse(localStorage.getItem("gifFavArray"))) {
+        showFavorites();
+    }
+    else {
+        return;
+    }
+}
 
 //Displays the buttons that were submitted as favorite
 function showFavorites() {
