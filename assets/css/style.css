@@ -30,3 +30,16 @@ h1 {
     margin: 1px;
     background-color: white;
 }
+
+.headingFav{
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 25px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.favButton{
+    background-color: lightcoral;
+}
+

@@ -1,8 +1,17 @@
 //Array with list of topics of gifs to search for
 var topics = ["Elder Scrolls", "Pac Man", "Mega Man", "The Legend of Zelda", "Last of Us", "Crash Bandicoot", "Final Fantasy", "Chrono Trigger", "Dragon Quest", "Street Fighter", "Overwatch", "League of Legends"];
 
+var favoriteTopics = [];
+
+
 //Initial display of buttons from the array
 showButtons();
+
+//This will show the favorites if there are any in the local storage
+if(JSON.parse(localStorage.getItem("array"))){
+    showFavorites();
+}
+
 
 //Adds click function for the input tag that adds whatever value within the search box into a button
 $("#add-gif").on("click", function (event) {
@@ -18,10 +27,37 @@ $("#add-gif").on("click", function (event) {
 
     if(searchValue != ""){
         topics.push(searchValue);
+
     }
+
+    $("#gif-input").val("");
+
+    //adding the current and newly added term to local storage
 
     showButtons();
 });
+
+$("#add-favorite").on("click", function(event){
+
+    event.preventDefault();
+
+    var searchFavorite = $("#gif-input").val().trim();
+
+    if(favoriteTopics.indexOf(searchFavorite) >= 0){
+        searchFavorite = "";
+    }
+
+    if(searchFavorite != ""){
+        favoriteTopics.push(searchFavorite);
+    }
+
+    $("#gif-input").val("");
+    
+    localStorage.setItem("array", JSON.stringify(favoriteTopics));
+
+    showFavorites();
+
+})
 
 function animateGif(){
     var state = $(this).attr("data-state");
@@ -48,6 +84,19 @@ function showButtons() {
         $("#buttons").append(arrayButton);
     }
 };
+
+function showFavorites(){
+
+    $("#favorite").empty();
+
+    for (var i = 0; i < JSON.parse(localStorage.getItem("array")).length; i++) {
+        var favoriteButton = $("<button class='gifButton favButton'>");
+        favoriteButton.attr("data-gif", JSON.parse(localStorage.getItem("array"))[i]);
+        favoriteButton.text(JSON.parse(localStorage.getItem("array"))[i]);
+        $("#favorite").append(favoriteButton);
+    }
+
+}
 
 //function that uses the Giphy API, searches the button value, and displays that value on the page
 function displayGifs() {
@@ -89,12 +138,3 @@ $(document).on("click", ".gifButton", displayGifs);
 
 //Adds any gifs with the "gif" class to run the displayGifs functionwhen clicked
 $(document).on("click", ".gif", animateGif);
-
-
-
-
-
-
-
-
-
