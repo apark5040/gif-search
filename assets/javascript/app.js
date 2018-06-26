@@ -1,9 +1,6 @@
 //Array with list of topics of gifs to search for
 var topics = ["Elder Scrolls", "Pac Man", "Mega Man", "The Legend of Zelda", "Last of Us", "Crash Bandicoot", "Final Fantasy", "Chrono Trigger", "Dragon Quest", "Street Fighter", "Overwatch", "League of Legends"];
 
-var favoriteTopics = [];
-
-
 //Initial display of buttons from the array
 showButtons();
 
@@ -26,15 +23,14 @@ $("#add-gif").on("click", function (event) {
     var searchValue = $("#gif-input").val().trim();
 
     //Made if statements to prevent blank inputs and duplicates
-    if (topics.indexOf(searchValue) >= 0) {
-        searchValue = "";
+    if (topics.includes(searchValue)) {
+        return;
     }
 
-    if (searchValue != "") {
-        topics.push(searchValue);
-
+    if (searchValue == "") {
+        return;
     }
-
+    topics.push(searchValue);
     $("#gif-input").val("");
 
     //adding the current and newly added term to local storage
@@ -47,17 +43,20 @@ $("#add-favorite").on("click", function (event) {
     event.preventDefault();
 
 
+
     var favList = [];
     var searchFavorite = $("#gif-input").val().trim();
 
+    if (searchFavorite == "") {
+        return;
+    }
+
 
     if (JSON.parse(localStorage.getItem("gifFavArray")).includes(searchFavorite)) {
-        searchFavorite = "";
-    }
-    if (searchFavorite !== "") {
-        favList.push(searchFavorite);
+        return;
     }
 
+    favList.push(searchFavorite);
     favList = JSON.parse(localStorage.getItem("gifFavArray"));
     favList.push(searchFavorite);
     localStorage.setItem("gifFavArray", JSON.stringify(favList));
